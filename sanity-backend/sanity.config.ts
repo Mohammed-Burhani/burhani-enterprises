@@ -7,7 +7,7 @@ export default defineConfig({
   name: 'default',
   title: 'burhani-enterprises',
 
-  projectId: 'cyyiok74',
+  projectId: '6qm97z3a',
   dataset: 'production',
 
   plugins: [structureTool(), visionTool()],
