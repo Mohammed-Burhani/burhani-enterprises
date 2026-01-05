@@ -3,9 +3,9 @@ const AboutBanner = () => {
     <section className="bg-white px-6 py-8">
       <div className="container mx-auto">
         <div className="bg-[url(/about/banner.png)] bg-cover bg-center min-h-[400px] rounded-lg flex items-center justify-end relative">
-          <div className="bg-linear-to-r from-transparent via-transparent to-black/50 absolute inset-0 w-full h-full rounded-lg" />
+          <div className="bg-linear-to-r from-black/40 lg:from-transparent lg:via-transparent to-black/50 absolute inset-0 w-full h-full rounded-lg" />
           
-          <div className="z-10 text-end px-12">
+          <div className="z-10 text-center lg:text-end py-12 lg:py-0 px-12">
             <h1 className="text-3xl font-bold text-white mb-6">
               INDUSTRIAL SOLUTIONS - CHENNAI
             </h1>

@@ -13,7 +13,7 @@ const ContactInfoSection = () => {
               Phone
             </h3>
             <div className="bg-white rounded-lg py-4 px-6 shadow-sm">
-              <p className="text-[#0B3059] font-medium text-lg">
+              <p className="text-[#0B3059] font-medium text-base lg:text-lg">
                 +91 98413 47052 / +91 98415 30723
               </p>
             </div>
@@ -25,7 +25,7 @@ const ContactInfoSection = () => {
               Email
             </h3>
             <div className="bg-white rounded-lg py-4 px-6 shadow-sm">
-              <p className="text-[#0B3059] font-medium text-lg">
+              <p className="text-[#0B3059] font-medium text-base lg:text-lg">
                 burhanienterprises.hussain@yahoo.com
               </p>
             </div>
@@ -37,7 +37,7 @@ const ContactInfoSection = () => {
               Address
             </h3>
             <div className="bg-white rounded-lg py-4 px-6 shadow-sm">
-              <p className="text-[#0B3059] font-medium text-lg">
+              <p className="text-[#0B3059] font-medium text-base lg:text-lg">
                 No 7/9, Perianna Maistry Street, Parrys, Chennai - 01
               </p>
             </div>

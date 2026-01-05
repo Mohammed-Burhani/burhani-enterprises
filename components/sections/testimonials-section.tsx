@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { getTestimonials, Testimonial, urlFor } from '@/lib/sanity'
 
 const TestimonialsSection = () => {
@@ -95,15 +96,23 @@ const TestimonialsSection = () => {
     setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
 
+  // Auto-advance testimonials every 6 seconds
+  useEffect(() => {
+    if (testimonials.length > 1) {
+      const timer = setInterval(nextTestimonial, 6000)
+      return () => clearInterval(timer)
+    }
+  }, [testimonials.length])
+
   if (loading) {
     return (
-      <section className="bg-gray-100 py-16">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-[#2C5F7A] mb-16">
+      <section className="bg-gray-100 py-8 sm:py-12 md:py-16">
+        <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#2C5F7A] mb-8 sm:mb-12 md:mb-16">
             CUSTOMER TESTIMONIALS
           </h2>
           <div className="flex justify-center items-center min-h-[200px]">
-            <div className="text-xl text-gray-600">Loading testimonials...</div>
+            <div className="text-lg sm:text-xl text-gray-600">Loading testimonials...</div>
           </div>
         </div>
       </section>
@@ -115,31 +124,18 @@ const TestimonialsSection = () => {
   }
 
   return (
-    <section className="bg-gray-100 py-16">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center text-[#2C5F7A] mb-16">
+    <section className="bg-gray-100 py-8 sm:py-12 md:py-16">
+      <div className="container mx-auto px-4 sm:px-6">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#2C5F7A] mb-8 sm:mb-12 md:mb-16">
           CUSTOMER TESTIMONIALS
         </h2>
         
-        <div className="max-w-4xl mx-auto relative">
-          <div className="bg-white rounded-lg p-12 shadow-lg text-center relative">
-            <button 
-              onClick={prevTestimonial}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-[#0B3059] text-white rounded-full flex items-center justify-center hover:bg-[#2C5F7A] transition-colors"
-            >
-              <span className="text-xl">‹</span>
-            </button>
-            
-            <button 
-              onClick={nextTestimonial}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-[#0B3059] text-white rounded-full flex items-center justify-center hover:bg-[#2C5F7A] transition-colors"
-            >
-              <span className="text-xl">›</span>
-            </button>
-
-            <div className="px-16">
+        <div className="max-w-4xl mx-auto">
+          {/* Testimonial Card */}
+          <div className="bg-white rounded-lg p-6 sm:p-8 md:p-12 shadow-lg text-center mb-4 sm:mb-6">
+            <div className="max-w-3xl mx-auto">
               {testimonials[currentTestimonial].authorImage && (
-                <div className="mb-6 flex justify-center">
+                <div className="mb-4 sm:mb-6 flex justify-center">
                   <Image 
                     src={urlFor(testimonials[currentTestimonial].authorImage).width(80).height(80).url()} 
                     alt={testimonials[currentTestimonial].author}
@@ -149,27 +145,27 @@ const TestimonialsSection = () => {
                   />
                 </div>
               )}
-              <p className="text-lg text-gray-700 leading-relaxed mb-8">
-                {testimonials[currentTestimonial].text}
+              <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-6 sm:mb-8">
+                "{testimonials[currentTestimonial].text}"
               </p>
               <div className="text-center">
-                <p className="text-[#0B3059] font-semibold">
+                <p className="text-[#0B3059] font-semibold text-sm sm:text-base">
                   — {testimonials[currentTestimonial].author}
                 </p>
                 {testimonials[currentTestimonial].authorTitle && (
-                  <p className="text-gray-600 text-sm mt-1">
+                  <p className="text-gray-600 text-xs sm:text-sm mt-1">
                     {testimonials[currentTestimonial].authorTitle}
                   </p>
                 )}
                 {testimonials[currentTestimonial].company && (
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-xs sm:text-sm">
                     {testimonials[currentTestimonial].company}
                   </p>
                 )}
                 {testimonials[currentTestimonial].rating && (
                   <div className="flex justify-center mt-2">
                     {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-lg">★</span>
+                      <span key={i} className="text-yellow-400 text-base sm:text-lg">★</span>
                     ))}
                   </div>
                 )}
@@ -177,17 +173,44 @@ const TestimonialsSection = () => {
             </div>
           </div>
 
-          <div className="flex justify-center mt-6 space-x-2">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentTestimonial(index)}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentTestimonial ? 'bg-[#0B3059]' : 'bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
+          {/* Navigation Controls Below Card */}
+          {testimonials.length > 1 && (
+            <div className="flex items-center justify-center gap-4 sm:gap-6">
+              {/* Previous Button */}
+              <button 
+                onClick={prevTestimonial}
+                className="w-10 h-10 sm:w-12 sm:h-12 bg-[#0B3059] hover:bg-[#2C5F7A] text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 group"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              </button>
+
+              {/* Slide Indicators */}
+              <div className="flex gap-2 sm:gap-3">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentTestimonial(index)}
+                    className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-200 ${
+                      index === currentTestimonial 
+                        ? 'bg-[#0B3059] scale-110' 
+                        : 'bg-gray-300 hover:bg-gray-400'
+                    }`}
+                    aria-label={`Go to testimonial ${index + 1}`}
+                  />
+                ))}
+              </div>
+
+              {/* Next Button */}
+              <button 
+                onClick={nextTestimonial}
+                className="w-10 h-10 sm:w-12 sm:h-12 bg-[#0B3059] hover:bg-[#2C5F7A] text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 group"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>

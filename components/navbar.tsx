@@ -1,5 +1,6 @@
 'use client'
 import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 
 const Navbar = () => {
@@ -28,12 +29,12 @@ const Navbar = () => {
           <ul className='flex gap-8'>
             {navLinks.map((link) => (
               <li key={link.name}>
-                <a
+                <Link
                   href={link.href}
                   className='text-gray-800 hover:text-gray-900 font-medium text-sm'
                 >
                   {link.name}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -87,13 +88,13 @@ const Navbar = () => {
             <ul className="space-y-6">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a
+                  <Link
                     href={link.href}
                     onClick={toggleDrawer}
                     className="block text-gray-800 hover:text-gray-900 font-medium text-lg py-2 border-b border-transparent hover:border-gray-800 transition-colors"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

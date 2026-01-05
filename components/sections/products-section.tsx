@@ -31,7 +31,7 @@ const ProductsSection = () => {
         <h2 className="text-center text-3xl text-[#0B3059] mb-8 uppercase tracking-widest">
           Core Categories
         </h2>
-        <div className="space-y-12 max-w-5xl mx-auto">
+        <div className="flex flex-col gap-y-12 max-w-5xl mx-auto">
           {products.map((product, index) => (
             <ProductShowcase
               key={index}
