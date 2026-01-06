@@ -47,6 +47,7 @@ export default defineType({
           {title: 'Addison', value: 'Addison'},
           {title: 'Dewalt', value: 'Dewalt'},
           {title: 'Blue Point', value: 'Blue Point'},
+          {title: 'Other', value: 'Other'},
         ],
       },
       validation: (Rule) => Rule.required(),

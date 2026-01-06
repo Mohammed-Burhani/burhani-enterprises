@@ -2,7 +2,7 @@ import AboutBanner from '@/components/sections/about-banner'
 import WhyChooseUs from '@/components/sections/why-choose-us'
 import ExperienceSection from '@/components/sections/experience-section'
 import TestimonialsSection from '@/components/sections/testimonials-section'
-import Footer from '@/components/sections/footer'
+import { ContactSection } from '@/components'
 
 export default function About() {
   return (
@@ -11,7 +11,7 @@ export default function About() {
       <WhyChooseUs />
       <ExperienceSection />
       <TestimonialsSection />
-      <Footer />
+      <ContactSection />
     </main>
   )
 }

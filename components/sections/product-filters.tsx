@@ -27,8 +27,8 @@ const ProductFilters = ({ onFilterChange }: FilterProps) => {
   })
 
   const filterOptions = {
-    brands: ['Stanley', 'Bosch', 'Addison', 'Dewalt', 'Blue Point'],
-    categories: ['Power Tools', 'Hand Tools', 'Fasteners'],
+    brands: ['Stanley', 'Bosch', 'Addison', 'Dewalt', 'Blue Point', "Other"],
+    categories: ['Power Tools', 'Hand Tools', 'Fasteners', "Safety Equipment", "Cutting Tools", "Other"],
     materials: ['Steel', 'Aluminum', 'Iron', 'Composite']
   }
 
@@ -66,7 +66,7 @@ const ProductFilters = ({ onFilterChange }: FilterProps) => {
   const activeFiltersCount = filters.brands.length + filters.categories.length + filters.materials.length
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border w-full lg:w-64">
+    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border w-full lg:w-64 sticky top-5">
       {/* Clear Filters Button */}
       {activeFiltersCount > 0 && (
         <div className="mb-4 pb-4 border-b">
@@ -140,7 +140,7 @@ const ProductFilters = ({ onFilterChange }: FilterProps) => {
       </div>
 
       {/* Material Filter */}
-      <div className="mb-4 sm:mb-6">
+      {/* <div className="mb-4 sm:mb-6">
         <button 
           onClick={() => toggleSection('material')}
           className="flex items-center justify-between w-full text-left font-semibold text-gray-800 mb-3 py-1"
@@ -167,7 +167,7 @@ const ProductFilters = ({ onFilterChange }: FilterProps) => {
             ))}
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   )
 }

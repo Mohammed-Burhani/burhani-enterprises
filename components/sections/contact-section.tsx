@@ -2,10 +2,10 @@ import { ArrowRight } from "lucide-react"
 
 const ContactSection = () => {
   return (
-    <section className="bg-[#D2E6FB] py-16">
+    <section className="bg-[#D2E6FB] py-16" id="enquirynow">
       <div className="container mx-auto px-6">
-        <h2 className="text-center text-3xl text-[#0B3059] mb-12 tracking-widest">
-          YOUR DETAILS
+        <h2 className="text-center text-3xl text-[#0B3059] mb-12 tracking-widest uppercase">
+          Send us your queries
         </h2>
         <div className="max-w-md mx-auto">
           <form className="space-y-4">
@@ -23,6 +23,11 @@ const ContactSection = () => {
               type="email"
               placeholder="Email"
               className="w-full px-4 py-3 rounded-md border-0 focus:outline-none focus:ring-2 focus:ring-[#2C5F7A] bg-white text-gray-700 placeholder-gray-400"
+            />
+            <textarea
+              placeholder="Message"
+              className="w-full px-4 py-3 rounded-md border-0 focus:outline-none focus:ring-2 focus:ring-[#2C5F7A] bg-white text-gray-700 placeholder-gray-400"
+              rows={4}
             />
             <button
               type="submit"

@@ -17,9 +17,20 @@ const Navbar = () => {
     setIsDrawerOpen(!isDrawerOpen)
   }
 
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault()
+    const element = document.getElementById(targetId)
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
+
   return (
     <>
-      <div className='flex justify-between items-center gap-4 bg-[#92CFE9] w-full px-6 py-3 relative'>
+      <div className='flex justify-between items-center gap-4 bg-[#92CFE9] w-full px-6 py-3 sticky top-0 z-50'>
         <div className='flex items-center gap-3'>
           <Image src={"/logo.svg"} alt="Burhani Enterprises" width={500} height={500} className="w-32 sm:w-48 md:w-64 h-8 sm:h-10 md:h-14" />
         </div>
@@ -42,7 +53,13 @@ const Navbar = () => {
         
         {/* Desktop Enquire Button */}
         <div className='hidden md:flex items-center gap-2'>
-          <span className='text-gray-800 text-sm border border-white p-2 px-4 rounded-xl'>Enquire Now!</span>
+          <a 
+            href="#enquirynow" 
+            onClick={(e) => handleSmoothScroll(e, 'enquirynow')}
+            className='text-gray-800 text-sm border border-white p-2 px-4 rounded-xl hover:bg-white/10 transition-colors'
+          >
+            Enquire Now!
+          </a>
         </div>
 
         {/* Mobile Menu Button */}
@@ -102,12 +119,16 @@ const Navbar = () => {
           
           {/* Mobile Enquire Button */}
           <div className="p-6 border-t border-white/20">
-            <button 
-              onClick={toggleDrawer}
-              className="w-full text-gray-800 text-sm border border-white p-3 px-4 rounded-xl hover:bg-white/10 transition-colors"
+            <a 
+              href="#enquirynow"
+              onClick={(e) => {
+                handleSmoothScroll(e, 'enquirynow')
+                toggleDrawer()
+              }}
+              className="block w-full text-center text-gray-800 text-sm border border-white p-3 px-4 rounded-xl hover:bg-white/10 transition-colors"
             >
               Enquire Now!
-            </button>
+            </a>
           </div>
         </div>
       </div>

@@ -5,8 +5,8 @@ import { Filter, X } from 'lucide-react'
 import ProductFilters from '@/components/sections/product-filters'
 import ProductGrid from '@/components/sections/product-grid'
 import Pagination from '@/components/sections/pagination'
-import Footer from '@/components/sections/footer'
 import { getProducts, Product, urlFor } from '@/lib/sanity'
+import { ContactSection } from "@/components"
 
 interface FilterState {
   brands: string[]
@@ -202,7 +202,7 @@ const ProductsPage = () => {
           </>
         )}
       </div>
-      <Footer />
+      <ContactSection />
     </div>
   )
 }
