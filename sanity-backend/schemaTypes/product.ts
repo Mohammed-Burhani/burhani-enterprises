@@ -62,6 +62,7 @@ export default defineType({
           {title: 'Fasteners', value: 'Fasteners'},
           {title: 'Safety Equipment', value: 'Safety Equipment'},
           {title: 'Cutting Tools', value: 'Cutting Tools'},
+          {title: 'Other', value: 'Other'},
         ],
       },
       validation: (Rule) => Rule.required(),
@@ -79,7 +80,7 @@ export default defineType({
           {title: 'Plastic', value: 'Plastic'},
         ],
       },
-      validation: (Rule) => Rule.required(),
+      // validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'price',
