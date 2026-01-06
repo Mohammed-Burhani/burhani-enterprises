@@ -2,7 +2,7 @@ import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
 export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'cyyiok74',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '6qm97z3a',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   useCdn: false, // Set to false to get fresh data without CDN caching
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
@@ -17,7 +17,7 @@ export function urlFor(source: any) {
 // Product queries
 export async function getProducts() {
   return client.fetch(`
-    *[_type == "product"] | order(_createdAt desc) {
+    *[_type == "product"] {
       _id,
       name,
       slug,
@@ -68,6 +68,25 @@ export async function getProductsByCategory(category: string) {
       featured
     }
   `, { category })
+}
+
+export async function getProductById(id: string) {
+  return client.fetch(`
+    *[_type == "product" && _id == $id][0] {
+      _id,
+      name,
+      slug,
+      description,
+      image,
+      brand,
+      category,
+      material,
+      price,
+      inStock,
+      featured,
+      specifications
+    }
+  `, { id })
 }
 
 // Testimonial queries

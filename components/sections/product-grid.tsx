@@ -1,4 +1,9 @@
+"use client"
+
+import { useState } from "react"
 import Image from "next/image"
+import ProductDetailsModal from "@/components/ui/product-details-modal"
+import { getProductById, urlFor } from "@/lib/sanity"
 
 interface Product {
   id: string | number
@@ -15,6 +20,50 @@ interface ProductGridProps {
 }
 
 const ProductGrid = ({ products }: ProductGridProps) => {
+  const [selectedProduct, setSelectedProduct] = useState<{
+    _id: string
+    name: string
+    description: string
+    image: string
+    brand: string
+    category: string
+    material?: string
+    price?: number
+    inStock: boolean
+    specifications?: Array<{ key: string; value: string }>
+  } | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const handleDetailsClick = async (productId: string | number) => {
+    setLoading(true)
+    try {
+      const fullProduct = await getProductById(productId.toString())
+      if (fullProduct) {
+        // Format the product data for the modal
+        const formattedProduct = {
+          ...fullProduct,
+          image: fullProduct.image?.asset 
+            ? urlFor(fullProduct.image).width(800).height(800).url()
+            : "/home/products/prod-1.png",
+          specifications: fullProduct.specifications || []
+        }
+        setSelectedProduct(formattedProduct)
+        setIsModalOpen(true)
+      } else {
+        console.error('Product not found')
+      }
+    } catch (error) {
+      console.error('Error fetching product details:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedProduct(null)
+  }
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -57,12 +106,24 @@ const ProductGrid = ({ products }: ProductGridProps) => {
                 {product.category}
               </span>
             </div>
-            <button className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-xs sm:text-sm uppercase">
-              DETAILS
+            <button 
+              onClick={() => handleDetailsClick(product.id)}
+              disabled={loading}
+              className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-xs sm:text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'LOADING...' : 'DETAILS'}
             </button>
           </div>
         </div>
       ))}
+      
+      {selectedProduct && (
+        <ProductDetailsModal
+          product={selectedProduct}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   )
 }

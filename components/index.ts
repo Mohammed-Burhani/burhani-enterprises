@@ -2,6 +2,7 @@
 export { default as HeroSection } from './ui/hero-section'
 export { default as ProductCard } from './ui/product-card'
 export { default as ProductShowcase } from './ui/product-showcase'
+export { default as ProductDetailsModal } from './ui/product-details-modal'
 
 // Section Components
 export { default as FeaturedProducts } from './sections/featured-products'
