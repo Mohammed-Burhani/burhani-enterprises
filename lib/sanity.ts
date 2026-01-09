@@ -124,6 +124,25 @@ export async function getFeaturedTestimonials() {
   `)
 }
 
+// Brand queries
+export async function getBrands() {
+  return client.fetch(`
+    *[_type == "brand"] | order(order asc) {
+      _id,
+      name,
+      slug,
+      logo,
+      "cataloguePdf": cataloguePdf.asset->url,
+      description,
+      categories[] {
+        name,
+        image
+      },
+      order
+    }
+  `)
+}
+
 // Types
 export interface Product {
   _id: string
@@ -151,4 +170,18 @@ export interface Testimonial {
   featured: boolean
   industry?: string
   publishedAt: string
+}
+
+export interface Brand {
+  _id: string
+  name: string
+  slug: { current: string }
+  logo: any
+  cataloguePdf?: string
+  description?: string
+  categories: Array<{
+    name: string
+    image: any
+  }>
+  order: number
 }
