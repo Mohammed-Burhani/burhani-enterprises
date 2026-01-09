@@ -20,8 +20,9 @@ const Brands = async () => {
                 className="bg-white rounded-lg shadow-md overflow-hidden"
               >
                 {/* Brand Header */}
-                <div className="bg-white p-6 border-b">
-                  <div className="flex items-center justify-between mb-4">
+
+                <div className="flex items-center justify-between bg-white p-6 border-b border-gray-300">
+                  <div className="flex gap-2 items-center">
                     <div className="relative h-12 w-32">
                       <Image
                         src={urlFor(brand.logo).url()}
@@ -30,39 +31,22 @@ const Brands = async () => {
                         className="object-contain"
                       />
                     </div>
-                    <div className="text-right">
-                      <h2 className="text-xl font-bold text-[#0B3059] mb-2">
-                        {brand.name}
-                      </h2>
-                      {brand.description && (
-                        <p className="text-sm text-gray-600 mb-3 max-w-md">
-                          {brand.description}
-                        </p>
-                      )}
-                    </div>
+                    <h2 className="text-3xl font-bold text-[#0B3059] mb-2">
+                      - {brand.name}
+                    </h2>
                   </div>
-                  
-                  {/* Prominent Download Button */}
+
+                  {/* Compact View Button Only */}
                   {brand.cataloguePdf && (
-                    <div className="flex gap-3">
-                      <a
-                        href={brand.cataloguePdf}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 bg-[#0B3059] text-white py-3 px-6 rounded-lg hover:bg-blue-800 transition-colors font-semibold text-sm uppercase tracking-wide shadow-md"
-                      >
-                        <FileText className="w-5 h-5" />
-                        View Catalogue
-                      </a>
-                      <a
-                        href={brand.cataloguePdf}
-                        download
-                        className="flex items-center justify-center gap-2 bg-white border-2 border-[#0B3059] text-[#0B3059] py-3 px-6 rounded-lg hover:bg-[#0B3059] hover:text-white transition-colors font-semibold text-sm uppercase tracking-wide"
-                      >
-                        <Download className="w-5 h-5" />
-                        Download
-                      </a>
-                    </div>
+                    <a
+                      href={brand.cataloguePdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium"
+                    >
+                      <FileText className="w-4 h-4" />
+                      View Catalogue
+                    </a>
                   )}
                 </div>
 
@@ -91,7 +75,21 @@ const Brands = async () => {
                     ))}
                   </div>
 
-                  {/* Download Catalogue Button - Removed as it's now at the top */}
+                  {/* Big Download Button Below Categories */}
+                  {brand.cataloguePdf && (
+                    <div className="border-t pt-6 mt-2 border-gray-400">
+                      <a
+                        href={brand.cataloguePdf}
+                        download
+                        className="block w-full text-center bg-[#0B3059] text-white py-4 px-6 rounded-lg hover:bg-blue-800 transition-colors font-bold text-base uppercase tracking-wide shadow-lg"
+                      >
+                        <div className="flex items-center justify-center gap-3">
+                          <Download className="w-6 h-6" />
+                          Download Catalogue
+                        </div>
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
