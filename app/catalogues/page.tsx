@@ -2,6 +2,10 @@ import Image from 'next/image'
 import { getBrands, urlFor, Brand } from '@/lib/sanity'
 import { Download, FileText } from 'lucide-react'
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 const Brands = async () => {
   const brands: Brand[] = await getBrands()
 

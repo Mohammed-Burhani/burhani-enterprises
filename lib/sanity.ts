@@ -6,6 +6,8 @@ export const client = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   useCdn: false, // Set to false to get fresh data without CDN caching
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
+  perspective: 'published', // Ensure we get published content
+  stega: false, // Disable stega for production
 })
 
 const builder = imageUrlBuilder(client)
@@ -31,7 +33,10 @@ export async function getProducts() {
       featured,
       specifications
     }
-  `)
+  `, {}, {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  })
 }
 
 export async function getFeaturedProducts() {
@@ -49,7 +54,10 @@ export async function getFeaturedProducts() {
       inStock,
       featured
     }
-  `)
+  `, {}, {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  })
 }
 
 export async function getProductsByCategory(category: string) {
@@ -67,7 +75,10 @@ export async function getProductsByCategory(category: string) {
       inStock,
       featured
     }
-  `, { category })
+  `, { category }, {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  })
 }
 
 export async function getProductById(id: string) {
@@ -86,7 +97,10 @@ export async function getProductById(id: string) {
       featured,
       specifications
     }
-  `, { id })
+  `, { id }, {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  })
 }
 
 // Testimonial queries
@@ -104,7 +118,10 @@ export async function getTestimonials() {
       industry,
       publishedAt
     }
-  `)
+  `, {}, {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  })
 }
 
 export async function getFeaturedTestimonials() {
@@ -121,7 +138,10 @@ export async function getFeaturedTestimonials() {
       industry,
       publishedAt
     }
-  `)
+  `, {}, {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  })
 }
 
 // Brand queries
@@ -140,7 +160,10 @@ export async function getBrands() {
       },
       order
     }
-  `)
+  `, {}, {
+    cache: 'no-store', // Disable caching
+    next: { revalidate: 0 } // Revalidate immediately
+  })
 }
 
 // Types
