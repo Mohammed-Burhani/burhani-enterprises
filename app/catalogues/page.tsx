@@ -81,7 +81,7 @@ const Brands = async () => {
                       <a
                         href={brand.cataloguePdf}
                         download
-                        className="block w-full text-center bg-[#0B3059] text-white py-4 px-6 rounded-lg hover:bg-blue-800 transition-colors font-bold text-base uppercase tracking-wide shadow-lg"
+                        className="block w-full text-center bg-[#0B3059] text-white py-4 px-6 rounded-lg hover:bg-[#0B3059]/90 transition-colors font-bold text-base uppercase tracking-wide shadow-lg"
                       >
                         <div className="flex items-center justify-center gap-3">
                           <Download className="w-6 h-6" />
