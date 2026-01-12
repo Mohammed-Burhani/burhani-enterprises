@@ -152,7 +152,11 @@ export async function getBrands() {
       name,
       slug,
       logo,
-      "cataloguePdf": cataloguePdf.asset->url,
+      "cataloguePdfs": cataloguePdfs[] {
+        title,
+        "fileUrl": file.asset->url,
+        description
+      },
       description,
       categories[] {
         name,
@@ -200,7 +204,11 @@ export interface Brand {
   name: string
   slug: { current: string }
   logo: any
-  cataloguePdf?: string
+  cataloguePdfs?: Array<{
+    title: string
+    fileUrl: string
+    description?: string
+  }>
   description?: string
   categories: Array<{
     name: string
