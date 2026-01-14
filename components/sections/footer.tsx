@@ -2,6 +2,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { MapPin, Phone, Mail, Clock } from "lucide-react"
+import { motion } from 'framer-motion'
 
 const Footer = () => {
   const navigationLinks = [
@@ -28,7 +29,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
           {/* Company Info Section */}
-          <div className="space-y-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
             <div className="bg-white rounded-lg p-3 inline-block">
               <Image 
                 src={"/logo.svg"} 
@@ -63,10 +70,15 @@ const Footer = () => {
                 </svg>
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             <h3 className="text-lg font-bold mb-6 text-[#92CFE9] uppercase tracking-wider">Quick Links</h3>
             <ul className="space-y-3">
               {navigationLinks.map((link, index) => (
@@ -81,10 +93,15 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Product Categories */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <h3 className="text-lg font-bold mb-6 text-[#92CFE9] uppercase tracking-wider">Categories</h3>
             <ul className="space-y-3">
               {productCategories.map((category, index) => (
@@ -99,10 +116,15 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Contact Info */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             <h3 className="text-lg font-bold mb-6 text-[#92CFE9] uppercase tracking-wider">Contact Us</h3>
             <ul className="space-y-4">
               <li className="flex items-start space-x-3 text-sm">
@@ -133,11 +155,17 @@ const Footer = () => {
                 </span>
               </li>
             </ul>
-          </div>
+          </motion.div>
         </div>
 
         {/* Map Section */}
-        <div className="mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-12"
+        >
           <h3 className="text-xl font-bold mb-6 text-center text-[#92CFE9] uppercase tracking-wider">Find Us</h3>
           <div className="rounded-lg overflow-hidden shadow-2xl border-4 border-white/10">
             <iframe
@@ -151,7 +179,7 @@ const Footer = () => {
               className="w-full grayscale hover:grayscale-0 transition-all duration-500"
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* Bottom Bar */}
         <div className="border-t border-white/20 pt-8">

@@ -1,5 +1,6 @@
 'use client'
 import Image from "next/image"
+import { motion } from 'framer-motion'
 
 const WhyChooseUs = () => {
   const features = [
@@ -30,14 +31,32 @@ const WhyChooseUs = () => {
   return (
     <section className="bg-gradient-to-b from-blue-50 to-blue-100 py-16">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center text-[#2C5F7A] mb-16 tracking-wide">
+        <motion.h2 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl font-bold text-center text-[#2C5F7A] mb-16 tracking-wide"
+        >
           WHY CHOOSE US ?
-        </h2>
+        </motion.h2>
         
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {features.map((feature, index) => (
-            <div key={index} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-              <div className="h-48 overflow-hidden">
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              whileHover={{ y: -10, transition: { duration: 0.3 } }}
+              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+            >
+              <motion.div 
+                className="h-48 overflow-hidden"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.4 }}
+              >
                 <Image 
                   src={feature.image} 
                   alt={feature.title}
@@ -45,7 +64,7 @@ const WhyChooseUs = () => {
                   height={200}
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </motion.div>
               <div className="p-6">
                 <h3 className="text-lg font-bold text-[#0B3059] mb-4 leading-tight">
                   {feature.title}
@@ -54,18 +73,26 @@ const WhyChooseUs = () => {
                   {feature.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        <div className="text-center">
-          <button 
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleScrollToContact}
             className="bg-[#0B3059] text-white px-10 py-3 rounded font-medium hover:bg-[#2C5F7A] transition-all duration-300 uppercase tracking-wide"
           >
             JOIN WITH US
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </section>
   )

@@ -1,4 +1,6 @@
+'use client'
 import ProductShowcase from '../ui/product-showcase'
+import { motion } from 'framer-motion'
 
 const ProductsSection = () => {
   const products = [
@@ -28,9 +30,15 @@ const ProductsSection = () => {
   return (
     <section className="bg-white py-12">
       <div className="container mx-auto px-6">
-        <h2 className="text-center text-3xl text-[#0B3059] mb-8 uppercase tracking-widest">
+        <motion.h2 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center text-3xl text-[#0B3059] mb-8 uppercase tracking-widest"
+        >
           Core Categories
-        </h2>
+        </motion.h2>
         <div className="flex flex-col gap-y-12 max-w-5xl mx-auto">
           {products.map((product, index) => (
             <ProductShowcase

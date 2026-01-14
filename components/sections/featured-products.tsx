@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { getProducts, Product, urlFor, getProductById } from '@/lib/sanity'
 import ProductDetailsModal from '../ui/product-details-modal'
 
@@ -126,17 +127,32 @@ const FeaturedProducts = () => {
   return (
     <section className="bg-[#D2E6FB] py-12">
       <div className="container mx-auto px-6">
-        <h2 className="text-center text-3xl text-[#0B3059] mb-8 tracking-widest">
+        <motion.h2 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center text-3xl text-[#0B3059] mb-8 tracking-widest"
+        >
           FEATURED PRODUCTS
-        </h2>
+        </motion.h2>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <div 
-              key={product._id} 
+          {products.map((product, index) => (
+            <motion.div 
+              key={product._id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
               className="bg-[#ABCCF0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
             >
-              <div className="bg-white h-48 flex items-center justify-center p-4">
+              <motion.div 
+                className="bg-white h-48 flex items-center justify-center p-4"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              >
                 <Image 
                   src={product.image?.asset ? urlFor(product.image).width(400).height(300).url() : "/home/products/prod-1.png"}
                   alt={product.name}
@@ -144,7 +160,7 @@ const FeaturedProducts = () => {
                   height={150}
                   className="max-w-full max-h-full object-contain"
                 />
-              </div>
+              </motion.div>
               <div className="p-4">
                 <h3 className="font-bold text-[#0B3059] text-lg mb-2 line-clamp-2">
                   {product.name}
@@ -160,15 +176,17 @@ const FeaturedProducts = () => {
                     {product.category}
                   </span>
                 </div>
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => handleDetailsClick(product._id)}
                   disabled={loadingDetails}
                   className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loadingDetails ? 'LOADING...' : 'DETAILS'}
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
