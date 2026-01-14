@@ -40,12 +40,16 @@ const Navbar = () => {
         <nav className='hidden md:block'>
           <ul className='flex gap-8'>
             {navLinks.map((link) => (
-              <li key={link.name}>
+              <li key={link.name} className="relative group">
                 <Link
                   href={link.href}
-                  className='text-gray-800 hover:text-gray-900 font-medium text-sm'
+                  className='text-gray-800 hover:text-gray-900 font-medium text-sm relative inline-block'
                 >
                   {link.name}
+                  {/* Underline animation - bolt/screw style */}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300 ease-out"></span>
+                  {/* Bolt head effect */}
+                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-gray-900 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 scale-0 group-hover:scale-100"></span>
                 </Link>
               </li>
             ))}

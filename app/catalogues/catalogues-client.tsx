@@ -44,7 +44,7 @@ export default function CataloguesClient({ brands }: CataloguesClientProps) {
                 >
                   {/* Brand Header */}
                   <div className="flex items-center justify-between bg-white p-6 border-b border-gray-300">
-                    <div className="flex gap-2 items-center">
+                    <div className="flex flex-wrap gap-2 items-center mx-auto xl:mx-0!">
                       <div className="relative h-12 w-32">
                         <Image
                           src={urlFor(brand.logo).url()}
@@ -59,7 +59,7 @@ export default function CataloguesClient({ brands }: CataloguesClientProps) {
                     </div>
 
                     {/* Compact View Button Only */}
-                    {brand.cataloguePdfs && brand.cataloguePdfs.length > 0 && (
+                    {/* {brand.cataloguePdfs && brand.cataloguePdfs.length > 0 && (
                       <button
                         onClick={() => handleCatalogueClick(brand)}
                         className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium"
@@ -67,7 +67,7 @@ export default function CataloguesClient({ brands }: CataloguesClientProps) {
                         <FileText className="w-4 h-4" />
                         View Catalogues ({brand.cataloguePdfs.length})
                       </button>
-                    )}
+                    )} */}
                   </div>
 
                   {/* Categories Grid */}
