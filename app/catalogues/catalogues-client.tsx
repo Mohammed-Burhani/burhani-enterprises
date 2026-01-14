@@ -5,6 +5,7 @@ import { urlFor, Brand } from '@/lib/sanity'
 import { Download, FileText } from 'lucide-react'
 import { useState } from 'react'
 import PdfModal from '@/components/ui/pdf-modal'
+import { ContactSection } from '@/components'
 
 interface CataloguesClientProps {
   brands: Brand[]
@@ -122,6 +123,8 @@ export default function CataloguesClient({ brands }: CataloguesClientProps) {
             )}
           </div>
         </section>
+        
+        <ContactSection />
       </main>
 
       {/* PDF Modal */}
@@ -133,6 +136,7 @@ export default function CataloguesClient({ brands }: CataloguesClientProps) {
           brandName={selectedBrand.name}
         />
       )}
+
     </>
   )
 }

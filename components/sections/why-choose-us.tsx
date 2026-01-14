@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image"
 
 const WhyChooseUs = () => {
@@ -18,6 +19,13 @@ const WhyChooseUs = () => {
       image: "/home/core-categories/cc-3.png"
     }
   ]
+
+  const handleScrollToContact = () => {
+    const contactSection = document.getElementById('enquirynow')
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 
   return (
     <section className="bg-gradient-to-b from-blue-50 to-blue-100 py-16">
@@ -51,7 +59,10 @@ const WhyChooseUs = () => {
         </div>
 
         <div className="text-center">
-          <button className="bg-[#0B3059] text-white px-10 py-3 rounded font-medium hover:bg-[#2C5F7A] transition-all duration-300 uppercase tracking-wide">
+          <button 
+            onClick={handleScrollToContact}
+            className="bg-[#0B3059] text-white px-10 py-3 rounded font-medium hover:bg-[#2C5F7A] transition-all duration-300 uppercase tracking-wide"
+          >
             JOIN WITH US
           </button>
         </div>

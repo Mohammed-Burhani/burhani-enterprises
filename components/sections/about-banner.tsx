@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 const AboutBanner = () => {
   return (
     <section className="bg-white px-6 py-8">
@@ -16,9 +18,11 @@ const AboutBanner = () => {
               tools, cutting tools, and MRO solutions. We don&apos;t just supply tools; 
               we add value to your entire production chain.
             </p>
-            <button className="bg-[#0B3059] text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-[#0B3059] transition-all duration-300">
-              EXPLORE OUR PRODUCTS
-            </button>
+            <Link href="/products">
+              <button className="bg-[#0B3059] text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-[#0B3059] transition-all duration-300">
+                EXPLORE OUR PRODUCTS
+              </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,12 +1,13 @@
 import Image from "next/image"
+import Link from "next/link"
 
 const Footer = () => {
   const navigationLinks = [
-    "HOME",
-    "ABOUT US",
-    "PRODUCTS",
-    "CONTACT US",
-    "SHOP NOW"
+    { name: "HOME", href: "/" },
+    { name: "ABOUT US", href: "/about" },
+    { name: "PRODUCTS", href: "/products" },
+    { name: "CATALOGUES", href: "/catalogues" },
+    { name: "CONTACT US", href: "/contact" }
   ]
 
   return (
@@ -14,7 +15,7 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         {/* Company Address */}
         <div className="text-center mb-12">
-          <Image src={"/logo.svg"} alt="Burhani Enterprises" width={500} height={500} className="w-64 h-14 mx-auto mb-3" />
+          <Image src={"/logo.svg"} alt="Burhani Enterprises" width={500} height={500} className="w-72 h-16 mx-auto mb-3" />
           <div className="text-gray-700 text-sm leading-relaxed">
             <p className="font-medium">NO 7/9, PERIANNA MAISTRY STREET, PARRYS, GEORGE TOWN,</p>
             <p className="font-medium">CHENNAI, TAMIL NADU 600001.</p>
@@ -29,13 +30,13 @@ const Footer = () => {
           </h2>
           <div className="flex flex-col space-y-3 max-w-xs mx-auto">
             {navigationLinks.map((link, index) => (
-              <a
+              <Link
                 key={index}
-                href="#"
+                href={link.href}
                 className="text-gray-700 hover:text-[#2C5F7A] transition-colors duration-200 font-medium text-sm tracking-wide"
               >
-                {link}
-              </a>
+                {link.name}
+              </Link>
             ))}
           </div>
         </div>
@@ -44,7 +45,9 @@ const Footer = () => {
         <div className="text-center">
           <div className="flex justify-center space-x-8 mb-8">
             <a
-              href="#"
+              href="https://www.linkedin.com/company/burhani-enterprises"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center text-gray-700 hover:text-[#2C5F7A] transition-colors duration-200"
             >
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -53,7 +56,9 @@ const Footer = () => {
               LinkedIn
             </a>
             <a
-              href="#"
+              href="https://www.instagram.com/burhanienterprises"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center text-gray-700 hover:text-[#2C5F7A] transition-colors duration-200"
             >
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">

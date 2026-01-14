@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -75,9 +76,11 @@ const HeroSection = () => {
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-200 mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed">
                       {slide.description}
                     </p>
-                    <button className="bg-white text-[#0B3059] px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-medium hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-sm sm:text-base">
-                      {slide.buttonText}
-                    </button>
+                    <Link href="/products">
+                      <button className="bg-white text-[#0B3059] px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-medium hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-sm sm:text-base">
+                        {slide.buttonText}
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>

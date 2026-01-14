@@ -33,7 +33,7 @@ const Navbar = () => {
     <>
       <div className='flex justify-between items-center gap-4 bg-[#92CFE9] w-full px-6 py-3 sticky top-0 z-50'>
         <div className='flex items-center gap-3'>
-          <Image src={"/logo.svg"} alt="Burhani Enterprises" width={500} height={500} className="w-32 sm:w-48 md:w-64 h-8 sm:h-10 md:h-14" />
+          <Image src={"/logo.svg"} alt="Burhani Enterprises" width={500} height={500} className="w-36 sm:w-56 md:w-72 xl:w-96 h-9 sm:h-12 md:h-16" />
         </div>
         
         {/* Desktop Navigation */}
@@ -90,7 +90,7 @@ const Navbar = () => {
         <div className="flex flex-col h-full">
           {/* Drawer Header */}
           <div className="flex justify-between items-center p-6 border-b border-white/20">
-            <Image src={"/logo.svg"} alt="Burhani Enterprises" width={200} height={200} className="w-32 h-8" />
+            <Image src={"/logo.svg"} alt="Burhani Enterprises" width={200} height={200} className="w-36 h-9" />
             <button 
               onClick={toggleDrawer}
               className="w-8 h-8 flex items-center justify-center"
