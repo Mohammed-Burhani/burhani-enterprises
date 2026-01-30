@@ -15,8 +15,8 @@ interface FilterState {
 
 const ProductFilters = ({ onFilterChange }: FilterProps) => {
   const [filters, setFilters] = useState<FilterState>({
-    brands: ['Stanley'],
-    categories: ['Power Tools'],
+    brands: [''],
+    categories: [''],
     materials: []
   })
 
@@ -110,7 +110,7 @@ const ProductFilters = ({ onFilterChange }: FilterProps) => {
       </div>
 
       {/* Category Filter */}
-      <div className="mb-4 sm:mb-6">
+      {/* <div className="mb-4 sm:mb-6">
         <button 
           onClick={() => toggleSection('category')}
           className="flex items-center justify-between w-full text-left font-semibold text-gray-800 mb-3 py-1"
@@ -137,7 +137,7 @@ const ProductFilters = ({ onFilterChange }: FilterProps) => {
             ))}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Material Filter */}
       {/* <div className="mb-4 sm:mb-6">

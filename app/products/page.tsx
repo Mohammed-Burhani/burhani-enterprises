@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from "react"
 import { Filter, X } from 'lucide-react'
 import ProductFilters from '@/components/sections/product-filters'
 import ProductGrid from '@/components/sections/product-grid'
-import Pagination from '@/components/sections/pagination'
 import { getProducts, Product, urlFor } from '@/lib/sanity'
 import { ContactSection } from "@/components"
 
@@ -15,7 +14,6 @@ interface FilterState {
 }
 
 const ProductsPage = () => {
-  const [currentPage, setCurrentPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState<FilterState>({
     brands: [],
@@ -24,8 +22,6 @@ const ProductsPage = () => {
   })
   const [allProducts, setAllProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  
-  const productsPerPage = 9
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -105,19 +101,8 @@ const ProductsPage = () => {
     })
   }, [formattedProducts, filters])
 
-  // Paginate filtered products
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage)
-  const startIndex = (currentPage - 1) * productsPerPage
-  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + productsPerPage)
-
   const handleFilterChange = (newFilters: FilterState) => {
     setFilters(newFilters)
-    setCurrentPage(1) // Reset to first page when filters change
-  }
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const toggleFilters = () => {
@@ -182,21 +167,11 @@ const ProductsPage = () => {
                 <div className="mb-4 sm:mb-6">
                   <h1 className="text-2xl sm:text-3xl font-bold text-[#0B3059] mb-2">Our Products</h1>
                   <p className="text-sm sm:text-base text-gray-600">
-                    Showing {paginatedProducts.length} of {filteredProducts.length} products
+                    Showing {filteredProducts.length} products
                   </p>
                 </div>
 
-                <ProductGrid products={paginatedProducts} />
-
-                {totalPages > 1 && (
-                  <div className="mt-6 sm:mt-8">
-                    <Pagination 
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      onPageChange={handlePageChange}
-                    />
-                  </div>
-                )}
+                <ProductGrid products={filteredProducts} />
               </div>
             </div>
           </>

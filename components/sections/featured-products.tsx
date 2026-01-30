@@ -265,7 +265,8 @@ const FeaturedProducts = () => {
                   <div className="flex items-center justify-end gap-2 mb-3">
                     <button
                       onClick={() => scroll(category, 'left')}
-                      className="p-2 bg-white hover:bg-[#0B3059] text-[#0B3059] hover:text-white rounded-full shadow-md transition-all duration-200 z-10"
+                      disabled={autoScrollStates[category]}
+                      className="p-2 bg-white hover:bg-[#0B3059] text-[#0B3059] hover:text-white rounded-full shadow-md transition-all duration-200 z-10 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#0B3059]"
                       aria-label="Scroll left"
                     >
                       <ChevronLeft className="w-5 h-5" />
@@ -279,7 +280,8 @@ const FeaturedProducts = () => {
                     </button>
                     <button
                       onClick={() => scroll(category, 'right')}
-                      className="p-2 bg-white hover:bg-[#0B3059] text-[#0B3059] hover:text-white rounded-full shadow-md transition-all duration-200 z-10"
+                      disabled={autoScrollStates[category]}
+                      className="p-2 bg-white hover:bg-[#0B3059] text-[#0B3059] hover:text-white rounded-full shadow-md transition-all duration-200 z-10 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#0B3059]"
                       aria-label="Scroll right"
                     >
                       <ChevronRight className="w-5 h-5" />
