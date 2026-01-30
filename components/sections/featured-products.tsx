@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
 import { getProducts, Product, urlFor, getProductById } from '@/lib/sanity'
 import ProductDetailsModal from '../ui/product-details-modal'
 
@@ -23,13 +24,19 @@ const FeaturedProducts = () => {
   } | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [loadingDetails, setLoadingDetails] = useState(false)
+  const [autoScrollStates, setAutoScrollStates] = useState<Record<string, boolean>>({})
+  const scrollRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const autoScrollIntervals = useRef<Record<string, NodeJS.Timeout>>({})
+  const [isDragging, setIsDragging] = useState<Record<string, boolean>>({})
+  const [startX, setStartX] = useState<Record<string, number>>({})
+  const [scrollLeft, setScrollLeft] = useState<Record<string, number>>({})
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const data = await getProducts()
         if (data && data.length > 0) {
-          setProducts(data.slice(0, 12))
+          setProducts(data)
         } else {
           // Fallback to dummy data only if no products exist
           setProducts([
@@ -92,8 +99,88 @@ const FeaturedProducts = () => {
       }
       grouped[category].push(product)
     })
+    // Initialize auto-scroll states for all categories
+    Object.keys(grouped).forEach(category => {
+      if (autoScrollStates[category] === undefined) {
+        setAutoScrollStates(prev => ({ ...prev, [category]: true }))
+      }
+    })
     return grouped
-  }, [products])
+  }, [products, autoScrollStates])
+
+  // Auto-scroll functionality
+  useEffect(() => {
+    Object.keys(productsByCategory).forEach(category => {
+      if (autoScrollStates[category] && scrollRefs.current[category]) {
+        autoScrollIntervals.current[category] = setInterval(() => {
+          const container = scrollRefs.current[category]
+          if (container) {
+            const maxScroll = container.scrollWidth - container.clientWidth
+            const currentScroll = container.scrollLeft
+            
+            if (currentScroll >= maxScroll) {
+              container.scrollLeft = 0
+            } else {
+              container.scrollLeft += 1
+            }
+          }
+        }, 30)
+      } else {
+        if (autoScrollIntervals.current[category]) {
+          clearInterval(autoScrollIntervals.current[category])
+        }
+      }
+    })
+
+    return () => {
+      Object.values(autoScrollIntervals.current).forEach(interval => clearInterval(interval))
+    }
+  }, [autoScrollStates, productsByCategory])
+
+  const toggleAutoScroll = (category: string) => {
+    setAutoScrollStates(prev => ({ ...prev, [category]: !prev[category] }))
+  }
+
+  const scroll = (category: string, direction: 'left' | 'right') => {
+    const container = scrollRefs.current[category]
+    if (container) {
+      const scrollAmount = 280 // card width + gap
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  // Drag to scroll functionality
+  const handleMouseDown = (category: string, e: React.MouseEvent) => {
+    const container = scrollRefs.current[category]
+    if (container) {
+      setIsDragging(prev => ({ ...prev, [category]: true }))
+      setStartX(prev => ({ ...prev, [category]: e.pageX - container.offsetLeft }))
+      setScrollLeft(prev => ({ ...prev, [category]: container.scrollLeft }))
+      setAutoScrollStates(prev => ({ ...prev, [category]: false }))
+    }
+  }
+
+  const handleMouseMove = (category: string, e: React.MouseEvent) => {
+    if (!isDragging[category]) return
+    e.preventDefault()
+    const container = scrollRefs.current[category]
+    if (container) {
+      const x = e.pageX - container.offsetLeft
+      const walk = (x - startX[category]) * 2
+      container.scrollLeft = scrollLeft[category] - walk
+    }
+  }
+
+  const handleMouseUp = (category: string) => {
+    setIsDragging(prev => ({ ...prev, [category]: false }))
+  }
+
+  const handleMouseLeave = (category: string) => {
+    setIsDragging(prev => ({ ...prev, [category]: false }))
+  }
 
   const handleDetailsClick = async (productId: string) => {
     setLoadingDetails(true)
@@ -150,71 +237,116 @@ const FeaturedProducts = () => {
           FEATURED PRODUCTS
         </motion.h2>
         
-        {/* Products grouped by category */}
-        <div className="space-y-12">
+        {/* Products grouped by category with carousel */}
+        <div className="space-y-8">
           {Object.entries(productsByCategory).map(([category, categoryProducts], categoryIndex) => (
             <motion.div 
               key={category}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
+              className="flex flex-col md:flex-row gap-4 md:gap-6 items-start"
             >
-              <h3 className="text-2xl font-bold text-[#0B3059] mb-6 border-b-2 border-[#0B3059] pb-2">
-                {category}
-              </h3>
+              {/* Category Label */}
+              <div className="md:w-48 flex-shrink-0">
+                <h3 className="text-xl md:text-2xl font-bold text-[#0B3059] md:sticky md:top-24 bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-sm border-l-4 border-[#0B3059]">
+                  {category}
+                  <span className="block text-sm font-normal text-gray-600 mt-1">
+                    {categoryProducts.length} {categoryProducts.length === 1 ? 'product' : 'products'}
+                  </span>
+                </h3>
+              </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {categoryProducts.map((product, index) => (
-                  <motion.div 
-                    key={product._id}
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                    className="bg-[#ABCCF0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
-                  >
-                    <motion.div 
-                      className="bg-white h-48 flex items-center justify-center p-4"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
+              {/* Scrollable Products Carousel */}
+              <div className="flex-1 overflow-hidden">
+                <div className="relative group">
+                  {/* Navigation Controls */}
+                  <div className="flex items-center justify-end gap-2 mb-3">
+                    <button
+                      onClick={() => scroll(category, 'left')}
+                      className="p-2 bg-white hover:bg-[#0B3059] text-[#0B3059] hover:text-white rounded-full shadow-md transition-all duration-200 z-10"
+                      aria-label="Scroll left"
                     >
-                      <Image 
-                        src={product.image?.asset ? urlFor(product.image).url() : "/home/products/prod-1.png"}
-                        alt={product.name}
-                        width={500}
-                        height={500}
-                        className="min-w-full! max-h-full object-contain"
-                      />
-                    </motion.div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-[#0B3059] text-lg mb-2 line-clamp-2">
-                        {product.name}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
-                        {product.description}
-                      </p>
-                      <div className="flex flex-wrap gap-1 mb-3 text-xs">
-                        <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
-                          {product.brand}
-                        </span>
-                        <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
-                          {product.category}
-                        </span>
-                      </div>
-                      <motion.button 
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => handleDetailsClick(product._id)}
-                        disabled={loadingDetails}
-                        className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => toggleAutoScroll(category)}
+                      className="p-2 bg-white hover:bg-[#0B3059] text-[#0B3059] hover:text-white rounded-full shadow-md transition-all duration-200 z-10"
+                      aria-label={autoScrollStates[category] ? "Pause auto-scroll" : "Play auto-scroll"}
+                    >
+                      {autoScrollStates[category] ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                    </button>
+                    <button
+                      onClick={() => scroll(category, 'right')}
+                      className="p-2 bg-white hover:bg-[#0B3059] text-[#0B3059] hover:text-white rounded-full shadow-md transition-all duration-200 z-10"
+                      aria-label="Scroll right"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div 
+                    ref={(el) => { scrollRefs.current[category] = el }}
+                    className={`flex gap-4 overflow-x-auto scrollbar-hide pb-4 ${isDragging[category] ? 'cursor-grabbing' : 'cursor-grab'}`}
+                    onMouseDown={(e) => handleMouseDown(category, e)}
+                    onMouseMove={(e) => handleMouseMove(category, e)}
+                    onMouseUp={() => handleMouseUp(category)}
+                    onMouseLeave={() => handleMouseLeave(category)}
+                  >
+                    {categoryProducts.map((product, index) => (
+                      <motion.div 
+                        key={product._id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: index * 0.05 }}
+                        whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                        className="flex-shrink-0 w-64 bg-[#ABCCF0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 select-none"
                       >
-                        {loadingDetails ? 'LOADING...' : 'DETAILS'}
-                      </motion.button>
-                    </div>
-                  </motion.div>
-                ))}
+                        <motion.div 
+                          className="bg-white h-40 flex items-center justify-center p-4"
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Image 
+                            src={product.image?.asset ? urlFor(product.image).url() : "/home/products/prod-1.png"}
+                            alt={product.name}
+                            width={400}
+                            height={400}
+                            className="max-w-full max-h-full object-contain pointer-events-none"
+                            draggable={false}
+                          />
+                        </motion.div>
+                        <div className="p-3">
+                          <h4 className="font-bold text-[#0B3059] text-base mb-2 line-clamp-2 min-h-[3rem]">
+                            {product.name}
+                          </h4>
+                          <p className="text-gray-600 text-xs mb-3 line-clamp-2 leading-relaxed">
+                            {product.description}
+                          </p>
+                          <div className="flex flex-wrap gap-1 mb-3 text-xs">
+                            <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
+                              {product.brand}
+                            </span>
+                          </div>
+                          <motion.button 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleDetailsClick(product._id)}
+                            disabled={loadingDetails}
+                            className="w-full bg-white text-[#0B3059] py-2 px-3 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-xs uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {loadingDetails ? 'LOADING...' : 'DETAILS'}
+                          </motion.button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                  
+                  {/* Scroll indicator */}
+                  <div className="absolute right-0 top-12 bottom-4 w-16 bg-gradient-to-l from-[#D2E6FB] to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
               </div>
             </motion.div>
           ))}
@@ -228,6 +360,16 @@ const FeaturedProducts = () => {
           onClose={handleCloseModal}
         />
       )}
+      
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   )
 }
