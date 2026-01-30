@@ -43,8 +43,8 @@ const ProductGrid = ({ products }: ProductGridProps) => {
         // Format the product data for the modal
         const formattedProduct = {
           ...fullProduct,
-          image: fullProduct.image?.asset 
-            ? urlFor(fullProduct.image).width(800).height(800).url()
+          image: fullProduct.image?.asset
+            ? urlFor(fullProduct.image).url()
             : "/home/products/prod-1.png",
           specifications: fullProduct.specifications || []
         }
@@ -82,13 +82,13 @@ const ProductGrid = ({ products }: ProductGridProps) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
       {products.map((product) => (
         <div key={product.id} className="bg-[#ABCCF0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="bg-white h-40 sm:h-48 flex items-center justify-center p-4">
-            <Image 
-              src={product.image} 
+          <div className="bg-white h-48 flex items-center justify-center p-4">
+            <Image
+              src={product.image}
               alt={product.name}
-              width={200}
-              height={150}
-              className="max-w-full max-h-full object-contain"
+              width={500}
+              height={500}
+              className="min-w-full! max-h-full object-contain"
             />
           </div>
           <div className="p-3 sm:p-4">
@@ -106,7 +106,7 @@ const ProductGrid = ({ products }: ProductGridProps) => {
                 {product.category}
               </span>
             </div>
-            <button 
+            <button
               onClick={() => handleDetailsClick(product.id)}
               disabled={loading}
               className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-xs sm:text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
@@ -116,7 +116,7 @@ const ProductGrid = ({ products }: ProductGridProps) => {
           </div>
         </div>
       ))}
-      
+
       {selectedProduct && (
         <ProductDetailsModal
           product={selectedProduct}

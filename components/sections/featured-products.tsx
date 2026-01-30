@@ -154,11 +154,11 @@ const FeaturedProducts = () => {
                 transition={{ duration: 0.3 }}
               >
                 <Image 
-                  src={product.image?.asset ? urlFor(product.image).width(400).height(300).url() : "/home/products/prod-1.png"}
+                  src={product.image?.asset ? urlFor(product.image).url() : "/home/products/prod-1.png"}
                   alt={product.name}
-                  width={200}
-                  height={150}
-                  className="max-w-full max-h-full object-contain"
+                  width={500}
+                  height={500}
+                  className="min-w-full! max-h-full object-contain"
                 />
               </motion.div>
               <div className="p-4">

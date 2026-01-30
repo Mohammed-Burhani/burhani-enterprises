@@ -87,7 +87,7 @@ const ProductsPage = () => {
       id: product._id,
       name: product.name,
       description: product.description,
-      image: product.image?.asset ? urlFor(product.image).width(400).height(300).url() : "/home/products/prod-1.png",
+      image: product.image?.asset ? urlFor(product.image).url() : "/home/products/prod-1.png",
       brand: product.brand,
       category: product.category,
       material: product.material
