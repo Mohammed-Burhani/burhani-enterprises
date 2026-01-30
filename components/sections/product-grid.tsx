@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Image from "next/image"
 import ProductDetailsModal from "@/components/ui/product-details-modal"
 import { getProductById, urlFor } from "@/lib/sanity"
@@ -35,6 +35,19 @@ const ProductGrid = ({ products }: ProductGridProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  // Group products by category
+  const productsByCategory = useMemo(() => {
+    const grouped: Record<string, Product[]> = {}
+    products.forEach(product => {
+      const category = product.category || 'Other'
+      if (!grouped[category]) {
+        grouped[category] = []
+      }
+      grouped[category].push(product)
+    })
+    return grouped
+  }, [products])
+
   const handleDetailsClick = async (productId: string | number) => {
     setLoading(true)
     try {
@@ -64,6 +77,7 @@ const ProductGrid = ({ products }: ProductGridProps) => {
     setIsModalOpen(false)
     setSelectedProduct(null)
   }
+  
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -79,40 +93,50 @@ const ProductGrid = ({ products }: ProductGridProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-      {products.map((product) => (
-        <div key={product.id} className="bg-[#ABCCF0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="bg-white h-48 flex items-center justify-center p-4">
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={500}
-              height={500}
-              className="min-w-full! max-h-full object-contain"
-            />
-          </div>
-          <div className="p-3 sm:p-4">
-            <h3 className="font-bold text-[#0B3059] text-base sm:text-lg mb-2 line-clamp-2">
-              {product.name}
-            </h3>
-            <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 leading-relaxed">
-              {product.description}
-            </p>
-            <div className="flex flex-wrap gap-1 mb-3 text-xs">
-              <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
-                {product.brand}
-              </span>
-              <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
-                {product.category}
-              </span>
-            </div>
-            <button
-              onClick={() => handleDetailsClick(product.id)}
-              disabled={loading}
-              className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-xs sm:text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'LOADING...' : 'DETAILS'}
-            </button>
+    <div className="space-y-12">
+      {Object.entries(productsByCategory).map(([category, categoryProducts]) => (
+        <div key={category}>
+          <h3 className="text-2xl font-bold text-[#0B3059] mb-6 border-b-2 border-[#0B3059] pb-2">
+            {category}
+          </h3>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {categoryProducts.map((product) => (
+              <div key={product.id} className="bg-[#ABCCF0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
+                <div className="bg-white h-48 flex items-center justify-center p-4">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={500}
+                    height={500}
+                    className="min-w-full! max-h-full object-contain"
+                  />
+                </div>
+                <div className="p-3 sm:p-4">
+                  <h3 className="font-bold text-[#0B3059] text-base sm:text-lg mb-2 line-clamp-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 leading-relaxed">
+                    {product.description}
+                  </p>
+                  <div className="flex flex-wrap gap-1 mb-3 text-xs">
+                    <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
+                      {product.brand}
+                    </span>
+                    <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
+                      {product.category}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => handleDetailsClick(product.id)}
+                    disabled={loading}
+                    className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-xs sm:text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? 'LOADING...' : 'DETAILS'}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       ))}

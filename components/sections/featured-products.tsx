@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { getProducts, Product, urlFor, getProductById } from '@/lib/sanity'
@@ -82,6 +82,19 @@ const FeaturedProducts = () => {
     fetchProducts()
   }, [])
 
+  // Group products by category
+  const productsByCategory = useMemo(() => {
+    const grouped: Record<string, Product[]> = {}
+    products.forEach(product => {
+      const category = product.category || 'Other'
+      if (!grouped[category]) {
+        grouped[category] = []
+      }
+      grouped[category].push(product)
+    })
+    return grouped
+  }, [products])
+
   const handleDetailsClick = async (productId: string) => {
     setLoadingDetails(true)
     try {
@@ -132,59 +145,76 @@ const FeaturedProducts = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center text-3xl text-[#0B3059] mb-8 tracking-widest"
+          className="text-center text-3xl text-[#0B3059] mb-12 tracking-widest"
         >
           FEATURED PRODUCTS
         </motion.h2>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product, index) => (
+        {/* Products grouped by category */}
+        <div className="space-y-12">
+          {Object.entries(productsByCategory).map(([category, categoryProducts], categoryIndex) => (
             <motion.div 
-              key={product._id}
-              initial={{ opacity: 0, y: 50 }}
+              key={category}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="bg-[#ABCCF0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
             >
-              <motion.div 
-                className="bg-white h-48 flex items-center justify-center p-4"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Image 
-                  src={product.image?.asset ? urlFor(product.image).url() : "/home/products/prod-1.png"}
-                  alt={product.name}
-                  width={500}
-                  height={500}
-                  className="min-w-full! max-h-full object-contain"
-                />
-              </motion.div>
-              <div className="p-4">
-                <h3 className="font-bold text-[#0B3059] text-lg mb-2 line-clamp-2">
-                  {product.name}
-                </h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
-                  {product.description}
-                </p>
-                <div className="flex flex-wrap gap-1 mb-3 text-xs">
-                  <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
-                    {product.brand}
-                  </span>
-                  <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
-                    {product.category}
-                  </span>
-                </div>
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleDetailsClick(product._id)}
-                  disabled={loadingDetails}
-                  className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loadingDetails ? 'LOADING...' : 'DETAILS'}
-                </motion.button>
+              <h3 className="text-2xl font-bold text-[#0B3059] mb-6 border-b-2 border-[#0B3059] pb-2">
+                {category}
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {categoryProducts.map((product, index) => (
+                  <motion.div 
+                    key={product._id}
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                    className="bg-[#ABCCF0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                  >
+                    <motion.div 
+                      className="bg-white h-48 flex items-center justify-center p-4"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Image 
+                        src={product.image?.asset ? urlFor(product.image).url() : "/home/products/prod-1.png"}
+                        alt={product.name}
+                        width={500}
+                        height={500}
+                        className="min-w-full! max-h-full object-contain"
+                      />
+                    </motion.div>
+                    <div className="p-4">
+                      <h3 className="font-bold text-[#0B3059] text-lg mb-2 line-clamp-2">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
+                        {product.description}
+                      </p>
+                      <div className="flex flex-wrap gap-1 mb-3 text-xs">
+                        <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
+                          {product.brand}
+                        </span>
+                        <span className="bg-white/50 text-[#0B3059] px-2 py-1 rounded text-xs font-medium">
+                          {product.category}
+                        </span>
+                      </div>
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleDetailsClick(product._id)}
+                        disabled={loadingDetails}
+                        className="w-full bg-white text-[#0B3059] py-2 px-4 rounded font-semibold hover:bg-[#0B3059] hover:text-white transition-all duration-300 text-sm uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {loadingDetails ? 'LOADING...' : 'DETAILS'}
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
           ))}
